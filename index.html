@@ -757,8 +757,8 @@
     <h3 style="font-size:19px;margin:34px 0 6px">Videos de muestra</h3>
     <p style="color:var(--muted);font-size:14px;margin:0 0 14px">Cada mes incluye 1 video con avatar IA (plano fijo) y 1 video cinematográfico IA (con movimiento y escenas).</p>
     <div class="video-row">
-      <div class="vframe"><iframe src="https://player.vimeo.com/video/1232816072?title=0&byline=0&portrait=0" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Video MC Diagnóstico Automotriz 1"></iframe></div>
-      <div class="vframe"><iframe src="https://player.vimeo.com/video/1232816103?title=0&byline=0&portrait=0" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Video MC Diagnóstico Automotriz 2"></iframe></div>
+      <div class="vframe"><iframe src="https://player.vimeo.com/video/1232816072?title=0&byline=0&portrait=0&badge=0&dnt=1&playsinline=1" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Video MC Diagnóstico Automotriz 1"></iframe></div>
+      <div class="vframe"><iframe src="https://player.vimeo.com/video/1232816103?title=0&byline=0&portrait=0&badge=0&dnt=1&playsinline=1" loading="lazy" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen title="Video MC Diagnóstico Automotriz 2"></iframe></div>
     </div>
     <p class="art-foot"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg> ¿Necesitan más contenido? Pueden sumar artes y videos adicionales — se reflejan en la calculadora de abajo.</p>
   </div>
@@ -1293,6 +1293,27 @@
   });
 
   refresh();
+})();
+</script>
+<script>
+(function(){
+  var frames = document.querySelectorAll('.video-row iframe');
+  if(!frames.length) return;
+  function proteger(iframe){
+    var p = new window.Vimeo.Player(iframe);
+    var ocupado = false;
+    p.on('timeupdate', function(d){
+      if(ocupado || !d || !d.duration) return;
+      if((d.duration - d.seconds) <= 0.7){
+        ocupado = true;
+        p.pause().then(function(){ return p.setCurrentTime(0); }).catch(function(){}).then(function(){ ocupado = false; });
+      }
+    });
+    p.on('ended', function(){ p.setCurrentTime(0).catch(function(){}); p.pause().catch(function(){}); });
+  }
+  function iniciar(){ frames.forEach(function(f){ try{ proteger(f); }catch(e){} }); }
+  if(window.Vimeo && window.Vimeo.Player){ iniciar(); }
+  else { var s=document.createElement('script'); s.src='https://player.vimeo.com/api/player.js'; s.onload=iniciar; document.head.appendChild(s); }
 })();
 </script>
 </body>
