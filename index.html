@@ -376,6 +376,41 @@
   .sign a{color:var(--mc-bright)}
   .foot{margin-top:40px;font-size:11.5px;color:var(--muted-2)}
 
+  /* ---------- panel interno de equipo (oculto) ---------- */
+  .team-panel{padding:10px 0 70px}
+  .team-panel[hidden]{display:none!important}
+  .tp-box{background:linear-gradient(180deg,#0e1413,#0b0c0e);border:1px solid rgba(54,214,196,.3);
+    border-radius:18px;padding:26px;position:relative;box-shadow:0 0 0 1px rgba(54,214,196,.08),0 30px 70px -40px rgba(0,0,0,.9)}
+  .tp-badge{display:inline-flex;align-items:center;gap:7px;font-family:"Saira";font-weight:600;font-size:12px;
+    color:var(--scan);letter-spacing:.02em;margin-bottom:12px}
+  .tp-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--scan);box-shadow:0 0 8px var(--scan)}
+  .tp-head h3{font-size:22px;margin-bottom:4px}
+  .tp-head p{font-size:13.5px;color:var(--muted);margin-bottom:18px}
+  .tp-summary{background:#070b0b;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:13px}
+  .tp-summary .srow{display:flex;justify-content:space-between;color:var(--muted);padding:3px 0}
+  .tp-summary .srow b{color:var(--text);font-family:"Saira";font-weight:600}
+  .tp-summary .srow.neg b,.tp-summary .srow.neg{color:var(--mc-bright)}
+  .tp-summary .empty{color:var(--muted-2);font-style:italic;text-align:center;padding:4px 0}
+  .tp-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:620px){.tp-grid{grid-template-columns:1fr}}
+  .tp-grid label{display:flex;flex-direction:column;gap:6px;font-family:"Saira";font-weight:500;font-size:12.5px;color:var(--muted)}
+  .tp-grid label.tp-full{grid-column:1/-1}
+  .tp-grid input,.tp-grid select,.tp-grid textarea{background:#0a0f0f;border:1px solid var(--steel);border-radius:9px;
+    padding:11px 12px;color:var(--text);font-family:"Inter";font-size:14px;font-weight:450;width:100%}
+  .tp-grid input:focus,.tp-grid select:focus,.tp-grid textarea:focus{outline:none;border-color:var(--scan);box-shadow:0 0 0 2px rgba(54,214,196,.15)}
+  .tp-grid input.bad{border-color:#e0533a;box-shadow:0 0 0 2px rgba(224,83,58,.15)}
+  .tp-grid textarea{resize:vertical;min-height:52px}
+  .tp-actions{display:flex;align-items:center;gap:16px;margin-top:20px;flex-wrap:wrap}
+  .tp-btn{background:var(--scan);color:#06211e;font-family:"Saira";font-weight:700;font-size:15px;border:none;
+    padding:14px 26px;border-radius:11px;cursor:pointer;transition:opacity .15s,filter .15s}
+  .tp-btn:hover:not(:disabled){filter:brightness(1.08)}
+  .tp-btn:disabled{opacity:.4;cursor:not-allowed}
+  .tp-total{font-family:"Saira";font-weight:700;font-size:16px;color:var(--text)}
+  .tp-total span{color:var(--muted);font-weight:500;font-size:13px}
+  .tp-status{margin-top:16px;font-size:13.5px;line-height:1.5;min-height:1px}
+  .tp-status.ok{color:var(--scan)}
+  .tp-status.err{color:#f08a72}
+  .tp-status.load{color:var(--muted)}
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
   :focus-visible{outline:2px solid var(--mc-bright);outline-offset:2px;border-radius:4px}
 
@@ -862,6 +897,60 @@
   </div>
 </section>
 
+<!-- ============================================================
+     PANEL INTERNO DE EQUIPO · OCULTO · solo con #equipo
+     Reutilizable: edita PANEL_CONFIG (abajo en el script) para otra propuesta.
+     ============================================================ -->
+<section class="team-panel" id="equipo-panel" hidden aria-hidden="true">
+  <div class="wrap">
+    <div class="tp-box">
+      <div class="tp-head">
+        <span class="tp-badge">Panel interno · solo equipo Poseidón</span>
+        <h3>Generar y enviar proforma</h3>
+        <p>Toma la selección actual de la calculadora y emite la proforma al cliente al instante.</p>
+      </div>
+
+      <div class="tp-summary" id="tpSummary"></div>
+
+      <div class="tp-grid">
+        <label>Nombre / razón social
+          <input id="tpNombre" type="text" autocomplete="off" placeholder="Nombre del destinatario">
+        </label>
+        <label>WhatsApp (09… / 08…)
+          <input id="tpTel" type="tel" inputmode="numeric" maxlength="10" autocomplete="off" placeholder="0983351085">
+        </label>
+        <label>RUC o cédula
+          <input id="tpRuc" type="text" inputmode="numeric" maxlength="13" autocomplete="off" placeholder="10 (cédula) o 13 (RUC) dígitos">
+        </label>
+        <label>Email
+          <input id="tpEmail" type="email" autocomplete="off" placeholder="cliente@correo.com">
+        </label>
+        <label>Teléfonos adicionales (opcional)
+          <input id="tpTelAdic" type="text" autocomplete="off" placeholder="09…, 09… (máx. 5, separados por coma)">
+        </label>
+        <label>Forma de pago
+          <select id="tpPago">
+            <option value="Mensual">Mensual</option>
+            <option value="Anual">Anual (−15%)</option>
+          </select>
+        </label>
+        <label class="tp-full">Nota
+          <textarea id="tpNota" rows="2"></textarea>
+        </label>
+        <label>Clave de equipo
+          <input id="tpClave" type="password" autocomplete="new-password" placeholder="••••••••">
+        </label>
+      </div>
+
+      <div class="tp-actions">
+        <button id="tpBtn" class="tp-btn" disabled>Generar proforma</button>
+        <div class="tp-total" id="tpTotal"></div>
+      </div>
+      <div class="tp-status" id="tpStatus" role="status" aria-live="polite"></div>
+    </div>
+  </div>
+</section>
+
 <!-- CLOSING -->
 <section class="closing">
   <div class="closing-glow"></div>
@@ -983,6 +1072,211 @@
   });
 
   render();
+})();
+</script>
+
+<script>
+/* ============================================================
+   PANEL INTERNO DE EQUIPO — bloque independiente y reutilizable.
+   Para otra propuesta: cambia PANEL_CONFIG (código, notaBase y servicios).
+   Los precios van SIN IVA; el sistema del webhook suma el 15%.
+   ============================================================ */
+(function(){
+  var PANEL_CONFIG = {
+    codigo: 'REQ-003',
+    notaBase: 'Propuesta MC Automotriz · REQ-003',
+    diasVigencia: 15,
+    webhook: 'https://mkposeidon.com/webhook/proforma-equipo',
+    descuentoAnual: 0.15,
+    // id (igual al data-id de la calculadora) -> nombre concreto + precio SIN IVA + nombre corto para la nota
+    servicios: {
+      'agente':           { nombre:'Agente IA · Emily (atención 24/7, filtrado y reportes)',               precio:200, corto:'Agente IA' },
+      'web':              { nombre:'Página web informativa integrada',                                     precio:45,  corto:'Página web' },
+      'soporte':          { nombre:'Marketing · Integración + Soporte',                                     precio:45,  corto:'Integración+Soporte' },
+      'cm':               { nombre:'Community Manager completo (gestión + campañas + automatización)',      precio:99,  corto:'Community Manager' },
+      'insumos':          { nombre:'Insumos digitales (8 artes + 2 videos)',                               precio:80,  corto:'Insumos' },
+      'artes':            { nombre:'Arte gráfico adicional',                                               precio:10,  corto:'Artes extra' },
+      'video-estatico':   { nombre:'Video estático adicional',                                             precio:30,  corto:'Video estático extra' },
+      'video-movimiento': { nombre:'Video con movimiento adicional (escena por escena)',                   precio:60,  corto:'Video movimiento extra' }
+    }
+  };
+
+  var $ = function(id){ return document.getElementById(id); };
+  var panel = $('equipo-panel');
+  if(!panel) return;
+  var modules = $('modules');
+  var elNombre=$('tpNombre'), elTel=$('tpTel'), elRuc=$('tpRuc'), elEmail=$('tpEmail'),
+      elAdic=$('tpTelAdic'), elPago=$('tpPago'), elNota=$('tpNota'), elClave=$('tpClave'),
+      elBtn=$('tpBtn'), elTotal=$('tpTotal'), elSummary=$('tpSummary'), elStatus=$('tpStatus');
+  var lastAutoNota = '';
+  var sending = false;
+
+  function round2(n){ return Math.round(n*100)/100; }
+  function money(n){ return '$'+Number(n).toLocaleString('en-US',{minimumFractionDigits:0,maximumFractionDigits:2}); }
+
+  // --- leer selección actual de la calculadora ---
+  function baseSeleccion(){
+    var out=[];
+    modules.querySelectorAll('[data-type="check"].on').forEach(function(el){
+      var c=PANEL_CONFIG.servicios[el.dataset.id]; if(c) out.push({id:el.dataset.id, c:c, qty:1});
+    });
+    var r=modules.querySelector('[data-type="radio"].on');
+    if(r){ var rc=PANEL_CONFIG.servicios[r.dataset.id]; if(rc) out.push({id:r.dataset.id, c:rc, qty:1}); }
+    modules.querySelectorAll('[data-type="step"]').forEach(function(el){
+      var v=+el.querySelector('[data-val]').textContent;
+      var c=PANEL_CONFIG.servicios[el.dataset.id];
+      if(v>0 && c) out.push({id:el.dataset.id, c:c, qty:v});
+    });
+    return out;
+  }
+
+  // --- construir líneas de la proforma según forma de pago ---
+  function construirServicios(){
+    var anual = elPago.value === 'Anual';
+    var mult = anual ? 12 : 1;
+    var sel = baseSeleccion();
+    var servicios = sel.map(function(s){
+      return { nombre:s.c.nombre, cantidad:s.qty*mult, precio_unitario:s.c.precio };
+    });
+    var subtotal = servicios.reduce(function(a,s){ return a + s.cantidad*s.precio_unitario; },0);
+    if(anual && subtotal>0){
+      servicios.push({ nombre:'Descuento pago anual 15%', cantidad:1, precio_unitario: -round2(subtotal*PANEL_CONFIG.descuentoAnual) });
+    }
+    var neto = servicios.reduce(function(a,s){ return a + s.cantidad*s.precio_unitario; },0);
+    return { servicios:servicios, neto:round2(neto), haySeleccion: sel.length>0, cortos: sel.map(function(s){return s.c.corto;}) };
+  }
+
+  // --- validaciones ---
+  function vTel(t){ return /^(09|08)\d{8}$/.test(t); }
+  function vRuc(r){ return /^\d{10}$/.test(r) || /^\d{13}$/.test(r); }
+  function vEmail(e){ return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(e); }
+  function vAdic(s){
+    s=(s||'').trim(); if(!s) return true;
+    var arr=s.split(',').map(function(x){return x.trim();}).filter(Boolean);
+    if(arr.length>5) return false;
+    return arr.every(vTel);
+  }
+
+  function mark(el, ok){ el.classList.toggle('bad', !ok && el.value.trim()!==''); }
+
+  function refresh(){
+    var data = construirServicios();
+    // resumen
+    if(!data.haySeleccion){
+      elSummary.innerHTML = '<div class="empty">Sin servicios seleccionados en la calculadora</div>';
+    } else {
+      elSummary.innerHTML = data.servicios.map(function(s){
+        var neg = s.precio_unitario<0 ? ' neg' : '';
+        return '<div class="srow'+neg+'"><span>'+s.nombre+' × '+s.cantidad+'</span><b>'+money(s.cantidad*s.precio_unitario)+'</b></div>';
+      }).join('') + '<div class="srow" style="border-top:1px solid var(--line);margin-top:6px;padding-top:8px"><span>Subtotal (sin IVA)</span><b>'+money(data.neto)+'</b></div>';
+    }
+    elTotal.innerHTML = money(data.neto)+' <span>+ IVA / '+(elPago.value==='Anual'?'año':'mes')+'</span>';
+
+    // nota automática (solo si el usuario no la editó)
+    var auto = PANEL_CONFIG.notaBase + ' · Plan: ' + (data.cortos.length? data.cortos.join(', ') : '—');
+    if(elNota.value==='' || elNota.value===lastAutoNota){ elNota.value = auto; }
+    lastAutoNota = auto;
+
+    // validación visual
+    mark(elTel, vTel(elTel.value.trim()));
+    mark(elRuc, vRuc(elRuc.value.trim()));
+    mark(elEmail, vEmail(elEmail.value.trim()));
+    mark(elAdic, vAdic(elAdic.value));
+
+    var ok = elNombre.value.trim() && vTel(elTel.value.trim()) && vRuc(elRuc.value.trim()) &&
+             vEmail(elEmail.value.trim()) && vAdic(elAdic.value) && elClave.value.trim() && data.haySeleccion;
+    elBtn.disabled = !ok || sending;
+    return data;
+  }
+
+  // --- visibilidad por hash ---
+  function sync(){
+    var on = location.hash === '#equipo';
+    panel.hidden = !on;
+    panel.setAttribute('aria-hidden', String(!on));
+    if(on){ refresh(); }
+  }
+  window.addEventListener('hashchange', sync);
+
+  // refrescar cuando cambie la calculadora o los campos
+  modules.addEventListener('click', function(){ if(!panel.hidden) refresh(); });
+  [elNombre,elTel,elRuc,elEmail,elAdic,elClave].forEach(function(el){ el.addEventListener('input', refresh); });
+  elPago.addEventListener('change', refresh);
+  elNota.addEventListener('input', function(){ /* al editar, deja de autogenerarse */ });
+
+  // --- envío ---
+  elBtn.addEventListener('click', function(){
+    if(sending) return;
+    var data = refresh();
+    if(elBtn.disabled) return;
+
+    if(!confirm('¿Generar proforma por '+money(data.neto)+' + IVA para '+elNombre.value.trim()+'?')) return;
+
+    sending = true; elBtn.disabled = true;
+    var txtOrig = elBtn.textContent; elBtn.textContent = 'Generando…';
+    elStatus.className='tp-status load'; elStatus.textContent='Enviando proforma…';
+
+    var payload = {
+      clave: elClave.value,
+      cliente_nombre: elNombre.value.trim(),
+      cliente_telefono: elTel.value.trim(),
+      cliente_ruc: elRuc.value.trim(),
+      cliente_email: elEmail.value.trim(),
+      servicios: data.servicios,
+      notas: elNota.value.trim(),
+      dias_vigencia: PANEL_CONFIG.diasVigencia,
+      telefonos_adicionales: elAdic.value.trim()
+    };
+
+    var claveEnviada = payload.clave;
+    // nunca mostrar la clave en pantalla, ni aunque el servidor la devolviera en un mensaje
+    function limpio(t){
+      t = String(t==null ? '' : t);
+      if(claveEnviada){ t = t.split(claveEnviada).join('••••'); }
+      return t;
+    }
+    function mostrarError(msg){
+      elStatus.className='tp-status err';
+      elStatus.textContent='✕ '+limpio(msg);
+    }
+
+    fetch(PANEL_CONFIG.webhook, {
+      method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+    }).then(function(res){
+      return res.json();
+    }).then(function(body){
+      if(body && body.ok === true){
+        var num  = body.proforma!=null ? body.proforma : '';
+        var env  = body.copias_enviadas!=null ? body.copias_enviadas : 0;
+        var fail = body.copias_fallidas!=null ? body.copias_fallidas : 0;
+        var txt = '✓ Proforma '+num+' generada y enviada';
+        if(body.cliente){ txt += ' a '+body.cliente; }
+        txt += ' · '+env+' copia(s) enviada(s)';
+        if(fail){ txt += ' · '+fail+' fallida(s)'; }
+        if(body.pdf_entregado === false){ txt += ' · ⚠ el PDF no se pudo entregar'; }
+        elStatus.className = (fail || body.pdf_entregado===false) ? 'tp-status err' : 'tp-status ok';
+        elStatus.textContent = limpio(txt)+'.';
+      } else {
+        // contrato de error: {ok:false, error, message} — siempre se muestra message
+        var fallback = {
+          CLAVE_INVALIDA:'Clave incorrecta.',
+          FALTAN_DATOS:'Faltan datos obligatorios.',
+          FALTAN_SERVICIOS:'Faltan servicios en la proforma.',
+          ERROR:'No se pudo generar la proforma.'
+        };
+        var msg = (body && body.message) ? body.message : ((body && fallback[body.error]) || 'No se pudo generar la proforma. Intenta de nuevo.');
+        mostrarError(msg);
+      }
+    }).catch(function(){
+      mostrarError('No se pudo leer la respuesta del servidor o no hay conexión. Revisa tu internet e intenta de nuevo.');
+    }).finally(function(){
+      // la clave se borra tras CADA intento, haya salido bien o mal
+      elClave.value = '';
+      sending=false; elBtn.textContent=txtOrig; refresh();
+    });
+  });
+
+  sync();
 })();
 </script>
 </body>
