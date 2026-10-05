@@ -360,6 +360,9 @@
     font-family:"Saira";font-weight:600;font-size:15px;padding:14px;border-radius:11px;margin-top:16px;width:100%;position:relative;
     transition:background .18s}
   .ro-cta:hover{background:var(--mc-bright)}
+  button.ro-cta{border:0;cursor:pointer;font-family:"Saira"}
+  .ro-team{background:transparent!important;border:1px solid rgba(54,214,196,.45)!important;color:var(--scan)}
+  .ro-team:hover{background:rgba(54,214,196,.1)!important}
 
   /* ---------- closing ---------- */
   .closing{padding:80px 0 40px;text-align:center;position:relative;overflow:hidden;border-top:1px solid var(--line)}
@@ -384,6 +387,9 @@
   .tp-badge{display:inline-flex;align-items:center;gap:7px;font-family:"Saira";font-weight:600;font-size:12px;
     color:var(--scan);letter-spacing:.02em;margin-bottom:12px}
   .tp-badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--scan);box-shadow:0 0 8px var(--scan)}
+  .tp-close{position:absolute;top:16px;right:16px;background:transparent;border:1px solid var(--steel);color:var(--muted);
+    font-family:"Saira";font-weight:600;font-size:12.5px;padding:7px 12px;border-radius:8px;cursor:pointer}
+  .tp-close:hover{border-color:var(--scan);color:var(--scan)}
   .tp-head h3{font-size:22px;margin-bottom:4px}
   .tp-head p{font-size:13.5px;color:var(--muted);margin-bottom:18px}
   .tp-summary{background:#070b0b;border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:18px;font-size:13px}
@@ -887,10 +893,9 @@
           <span>Con <b>pago anual</b> obtienen un <b>15% de descuento</b>.</span>
         </div>
         <ul class="ro-list" id="breakdown"></ul>
-        <a href="https://wa.me/593968520688?text=Hola%20Poseid%C3%B3n%2C%20me%20interesa%20el%20plan%20del%20ecosistema%20digital%20para%20MC%20Automotriz." class="ro-cta" target="_blank" rel="noopener">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 00-8.5 15.2L2 22l4.9-1.5A10 10 0 1012 2z"/></svg>
-          Quiero este plan
-        </a>
+        <button type="button" class="ro-cta ro-team" id="tpOpen" aria-expanded="false" aria-controls="equipo-panel">
+          <span>🔱</span> Equipo Poseidón · Generar proforma
+        </button>
         <p class="ro-note">Valores mensuales referenciales, no incluyen IVA. El plan se ajusta a lo que MC decida contratar. La publicidad pagada (pauta) se define aparte según metas.</p>
       </div>
     </div>
@@ -904,6 +909,7 @@
 <section class="team-panel" id="equipo-panel" hidden aria-hidden="true">
   <div class="wrap">
     <div class="tp-box">
+      <button type="button" class="tp-close" id="tpClose">Cerrar ✕</button>
       <div class="tp-head">
         <span class="tp-badge">Panel interno · solo equipo Poseidón</span>
         <h3>Generar y enviar proforma</h3>
@@ -958,7 +964,6 @@
     <div class="trident-big">🔱</div>
     <h2 class="quote">El negocio que gana no es el que más anuncia. Es el que <span class="hl">mejor atiende</span>.</h2>
     <p class="closing-sub">Listos para montar el ecosistema digital de <b>MC Diagnóstico Automotriz</b> y que cada cliente interesado llegue directo a sus manos.</p>
-    <a href="https://wa.me/593968520688?text=Hola%20Poseid%C3%B3n%2C%20quiero%20conversar%20la%20propuesta%20del%20ecosistema%20para%20MC%20Automotriz." class="btn btn-primary" target="_blank" rel="noopener">Conversemos la propuesta</a>
     <div class="sign">
       <div class="names">Ing. Mario Valenzuela · CEO &nbsp;|&nbsp; Ing. Alejandro Medranda · CIO</div>
       Poseidón · Arquitectos de Ecosistemas Digitales · Ecuador 2026<br>
@@ -1189,14 +1194,23 @@
     return data;
   }
 
-  // --- visibilidad por hash ---
-  function sync(){
-    var on = location.hash === '#equipo';
-    panel.hidden = !on;
-    panel.setAttribute('aria-hidden', String(!on));
-    if(on){ refresh(); }
+  // --- visibilidad por botón (sin depender del link) ---
+  var elOpen=$('tpOpen'), elClose=$('tpClose');
+  function abrir(){
+    panel.hidden=false; panel.setAttribute('aria-hidden','false');
+    elOpen.setAttribute('aria-expanded','true');
+    refresh();
+    panel.scrollIntoView({behavior:'smooth',block:'start'});
+    setTimeout(function(){ elNombre.focus({preventScroll:true}); },350);
   }
-  window.addEventListener('hashchange', sync);
+  function cerrar(){
+    elClave.value='';
+    panel.hidden=true; panel.setAttribute('aria-hidden','true');
+    elOpen.setAttribute('aria-expanded','false');
+    elOpen.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+  elOpen.addEventListener('click', function(){ panel.hidden ? abrir() : cerrar(); });
+  elClose.addEventListener('click', cerrar);
 
   // refrescar cuando cambie la calculadora o los campos
   modules.addEventListener('click', function(){ if(!panel.hidden) refresh(); });
@@ -1276,7 +1290,7 @@
     });
   });
 
-  sync();
+  refresh();
 })();
 </script>
 </body>
