@@ -344,6 +344,7 @@
   .ro-total{font-family:"Saira";font-weight:800;font-size:clamp(44px,9vw,60px);line-height:1;color:var(--scan);
     text-shadow:0 0 22px rgba(54,214,196,.55);letter-spacing:-.02em}
   .ro-total .cur{font-size:26px;vertical-align:top;margin-right:2px;text-shadow:0 0 14px rgba(54,214,196,.4)}
+  .ro-unit .iva{color:var(--scan);font-weight:700;margin-left:2px}
   .ro-unit{font-family:"Saira";font-weight:600;font-size:14px;color:var(--muted);margin-top:8px}
   .ro-list{list-style:none;margin:0;padding:0;position:relative;display:grid;gap:9px}
   .ro-list li{display:flex;justify-content:space-between;font-size:13.5px;color:var(--muted);
@@ -887,7 +888,7 @@
         <div class="ro-label">Inversión mensual estimada</div>
         <div class="ro-screen">
           <div class="ro-total"><span class="cur">$</span><span id="totalNum">424</span></div>
-          <div class="ro-unit">por mes</div>
+          <div class="ro-unit">por mes <span class="iva">+ IVA</span></div>
         </div>
         <div class="ro-promo">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4-3.9-3.8 5.4-.8z"/></svg>
@@ -897,7 +898,7 @@
         <button type="button" class="ro-cta ro-team" id="tpOpen" aria-expanded="false" aria-controls="equipo-panel">
           <span>🔱</span> Equipo Poseidón · Generar proforma
         </button>
-        <p class="ro-note">Valores mensuales referenciales, no incluyen IVA. El plan se ajusta a lo que MC decida contratar. La publicidad pagada (pauta) se define aparte según metas.</p>
+        <p class="ro-note">Todos los valores son mensuales y se muestran + IVA; el IVA se calcula sobre el total en la proforma. El plan se ajusta a lo que MC decida contratar. La publicidad pagada (pauta) se define aparte según metas.</p>
       </div>
     </div>
   </div>
